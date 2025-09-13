@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(234, 245, 239);
+    height: inherit;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+.navigationbar {
+            width: 100%;
+            height: 100px;
+            background-color: rgb(207, 223, 215);
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px dashed rgb(41, 63, 62);
+            padding: 10px 20px;
+            opacity: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navigationbar img {
+            height: 60px;
+            width: auto;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .navigationbar .nav-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        
+        .navigationbar button {
+            border: none;
+            background: none;
+            color: rgb(43, 66, 68);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .navigationbar button:hover {
+            text-decoration: underline;
+            color: #ff8000;
+        }
+
+.box {
+  margin : 100px;
+  margin-left: 550px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #ccc;
+  width: 350px;
+}
+h2 {
+  margin: 0 0 10px;
+}
+p {
+  margin: 0 0 20px;
+  color: #666;
+}
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+button:hover {
+  background: #084298;
+}
+.error {
+  color: red;
+  font-size: 14px;
+}
