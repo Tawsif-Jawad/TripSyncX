@@ -1,0 +1,212 @@
+
+ .login-btn-container input[type="submit"] {
+        width: 90px;
+        font-size: 14px;
+        padding: 6px 0;
+    }
+
+.login-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0 0 0;
+}
+.login-btn input[type="submit"] {
+    width: 120px;
+    font-size: 16px;
+    padding: 8px 0;
+    border-radius: 6px;
+    background-color: rgb(43, 66, 68);
+    color: rgb(214, 228, 221);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.login-btn input[type="submit"]:hover {
+    background-color: #ff8000;
+    color: rgb(43, 66, 68);
+    border-color: rgb(43, 66, 68);
+}
+.input-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 30px;
+    min-width: 220px;
+    height: 20px;
+    margin-left: 0px;
+}
+.input-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 30px;
+    min-width: 180px;
+    width: 100%;
+    margin-right: 0px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(234, 245, 239);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.navigationbar {
+    width: 100%;
+    height: 100px;
+    background-color: rgb(207, 223, 215);
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px dashed rgb(41, 63, 62);
+    padding: 20px 0;
+    overflow: hidden;
+    opacity: 90%;
+}
+.navigationbar img {
+    width: 10%;
+    height: 70px;
+    cursor: pointer;
+    border: none;
+    float: left;
+    margin-top: 5px;
+}
+.navigationbar button {
+    float: right;
+    border: none;
+    background: none;
+    color: rgb(43, 66, 68);
+    font-size: 25px;
+    cursor: pointer;
+    padding: 15px 10px;
+    margin-top: 10px;
+}
+.navigationbar button:hover {
+    text-decoration: underline;color: #ff8000;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 550px;
+    background-color:  rgb(207, 223, 215);
+    text-align: center;
+    border-radius: 50px;
+    border: 1px solid rgb(41, 63, 62);
+    box-shadow: 10px 10px 40px 0 rgb(41, 63, 62), 0 6px 20px 0 rgb(41, 63, 62);
+    color: rgb(41, 63, 62);
+    opacity: 0.95;
+    backdrop-filter: blur(5px);
+    padding: 10px 10px 10px 10px;
+    box-sizing:content-box;
+    font-size: 30px;
+}
+.login-form input[type="text"],
+.login-form input[type="number"],
+.login-form input[type="password"] {
+    width: 70%;
+    height: 30px;
+    border: 1px solid rgb(41, 63, 62);
+    border-radius: 5px;
+}
+.input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding-left: 50px;
+}
+.login-form input[type="submit"] {
+    background-color: rgb(43, 66, 68);
+    border-color: rgb(255, 136, 0);
+    color: rgb(214, 228, 221);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    display: block;
+    grid-column: 1 / -1;
+    justify-self: center;
+    padding: 5px 5px;
+    height: 40px;
+    font-size: 20px;
+    border: #ff8000 solid 2px;
+}
+
+.login-form input[type="button"] {
+    border: none;
+    background: none;
+    color: rgb(43, 66, 68);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-form button.register {
+    border: none;
+    background: none;
+    color: rgb(43, 66, 68);
+    font-size: 25px;
+    cursor: pointer;
+    margin: 0;
+    text-decoration: none;
+}
+
+
+.login-form button.register:hover {
+    text-decoration: underline;
+    color: #ff8000;
+    
+}
+
+.registration-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+}
+
+.registration-section label {
+    font-size: 20px;
+}
+.forget-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    margin-bottom: 10px;
+    margin-top: 2px;
+    
+}
+.login-form button.forget {
+    border: none;
+    background: none;
+    color: rgb(43, 66, 68);
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0;
+    text-decoration: none;
+}
+.login-form button.forget:hover {
+    text-decoration: underline;
+    color: #ff8000;
+    
+}
