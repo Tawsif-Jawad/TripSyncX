@@ -1,7 +1,6 @@
 <?php
 include "config.php";
 
-// Handle delete request
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $conn->query("DELETE FROM schedule WHERE id=$id");

@@ -8,25 +8,20 @@
   <script src="../JS/TicketPreview.js"></script>
 
 <?php
-// Include shared DB config (provides $conn)
 include __DIR__ . "/../PHP/config.php";
-// Start session for search persistence
 session_start();
 
-// Get search criteria from session, POST, or URL parameters
 $search_departure = '';
 $search_destination = '';
 $search_date = '';
 $search_ac_type = '';
 
-// Check if form was submitted (POST request)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $search_departure = $_POST['departure'] ?? '';
     $search_destination = $_POST['destination'] ?? '';
     $search_date = $_POST['departure_date'] ?? '';
     $search_ac_type = $_POST['ac'] ?? '';
     
-    // Update session with new search data
     $_SESSION['search_data'] = [
         'departure' => $search_departure,
         'destination' => $search_destination,
@@ -39,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $search_date = $_SESSION['search_data']['departure_date'];
     $search_ac_type = $_SESSION['search_data']['ac_type'] ?? '';
 } else {
-    // Fallback to GET parameters if session data not available
     $search_departure = $_GET['departure'] ?? '';
     $search_destination = $_GET['destination'] ?? '';
     $search_date = $_GET['departure_date'] ?? '';
@@ -157,26 +151,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <th>Price</th>
           </tr>
           <?php
-          // Build SQL query with filters based on search criteria
           $sql = "SELECT * FROM schedule WHERE 1=1";
           $params = [];
           $types = "";
           
-          // Add departure filter if provided
           if (!empty($search_departure)) {
               $sql .= " AND `from` = ?";
               $params[] = $search_departure;
               $types .= "s";
           }
           
-          // Add destination filter if provided  
           if (!empty($search_destination)) {
               $sql .= " AND `to` = ?";
               $params[] = $search_destination;
               $types .= "s";
           }
           
-          // Add AC/Non-AC filter if provided
           if (!empty($search_ac_type)) {
               $sql .= " AND `type` = ?";
               $params[] = $search_ac_type;
@@ -185,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           
           $sql .= " ORDER BY time ASC";
           
-          // Display search criteria
           if (!empty($search_departure) || !empty($search_destination) || !empty($search_ac_type) || !empty($search_date)) {
               echo '<tr><td colspan="6" style="background-color: #e8f5e8; text-align: center; padding: 10px; font-weight: bold;">';
               echo 'Showing results for: ';
@@ -196,7 +185,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               echo '</td></tr>';
           }
           
-          // Execute query with parameters if any
           if (!empty($params)) {
               $stmt = $conn->prepare($sql);
               $stmt->bind_param($types, ...$params);
@@ -232,12 +220,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               echo '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #666;">No schedules available for the selected route</td></tr>';
           }
           
-          // Close statement if it was used
           if (isset($stmt)) {
               $stmt->close();
           }
           
-          // Close connection
           $conn->close();
           ?>
         </table>

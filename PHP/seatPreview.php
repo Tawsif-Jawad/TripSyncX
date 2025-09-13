@@ -3,7 +3,6 @@ session_start();
 require_once __DIR__ . '/config.php';
 $fragment = isset($_GET['fragment']) && $_GET['fragment'] === '1';
 
-// Capture schedule info from query parameters (when coming from TicketPreview)
 $schedule_time = $_GET['time'] ?? '';
 $schedule_date = $_GET['date'] ?? '';
 $schedule_from = $_GET['from'] ?? '';
@@ -12,7 +11,6 @@ $schedule_type = $_GET['type'] ?? '';
 $schedule_fare = $_GET['fare'] ?? '';
 $schedule_Paasengername = $_GET['name'] ?? '';
 
-// Persist schedule context in session when provided via GET
 if (!empty($schedule_time) && !empty($schedule_date) && !empty($schedule_from) && !empty($schedule_to) && !empty($schedule_type) && !empty($schedule_fare)) {
     $_SESSION['last_schedule'] = [
         'time' => $schedule_time,
@@ -25,21 +23,17 @@ if (!empty($schedule_time) && !empty($schedule_date) && !empty($schedule_from) &
     ];
 }
 
-// Initialize variables and error messages like registration form
 $success = $error = "";
 $passenger_name = $email = $phone = $age = $selected_seats = "";
 $nameErr = $emailErr = $phoneErr = $ageErr = $seatsErr = "";
 $successMsg = "";
 
-// Handle form submission for continue button
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) {
     
-    // If any schedule hidden fields are empty, attempt restoration from session
     $restoreFields = ['time','date','from','to','bus_type','price'];
     if (isset($_SESSION['last_schedule'])) {
         foreach ($restoreFields as $rf) {
             if (empty($_POST[$rf])) {
-                // Map bus_type and price to session keys
                 if ($rf === 'bus_type' && isset($_SESSION['last_schedule']['type'])) {
                     $_POST['bus_type'] = $_SESSION['last_schedule']['type'];
                 } elseif ($rf === 'price' && isset($_SESSION['last_schedule']['fare'])) {
@@ -51,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
         }
     }
     
-    // Harmonize passenger name field: accept alternate keys
     if (empty($_POST['passenger_name'])) {
         $altKeys = ['Name','Passenger Name','passengerName','customer_name'];
         foreach ($altKeys as $ak) {
@@ -62,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
         }
     }
 
-    // Validation like registration form
     if (empty($_POST["passenger_name"])) {
         $nameErr = "Passenger name is required";
     } else {
@@ -102,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
         $selected_seats = trim($_POST["selected_seats"]);
     }
 
-    // Check if all validations passed
     if (empty($nameErr) && empty($emailErr) && empty($phoneErr) && empty($ageErr) && empty($seatsErr)) {
         try {
             $time = $_POST['time'];
@@ -121,12 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
                 } else {
                                 $total_price = count($seat_list) * floatval($raw_price);
 
-                    // Table existence check
                     $tblCheck = $conn->query("SHOW TABLES LIKE 'User_Profile_Ticket'");
                     if (!$tblCheck || $tblCheck->num_rows === 0) {
                         $error = "Ticket table missing in database";
                     } else {
-                        // Column detection for flexible schema
                         $columnsRes = $conn->query("SHOW COLUMNS FROM `User_Profile_Ticket`");
                         if (!$columnsRes) {
                             $error = "Cannot read table columns: ".$conn->error;
@@ -144,7 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
                             if (!$hasSpaced && !$hasSnake && !$hasName) {
                                 $error = "Passenger name column missing. Available columns: ".implode(', ', $cols);
                             } else {
-                                // Duplicate seat check based on schema
                                 if ($hasSpaced) {
                                     $seatCheckSql = "SELECT 1 FROM `User_Profile_Ticket` WHERE `Time`=? AND `Date`=? AND `From`=? AND `To`=? AND `Bus Type`=? AND (".
                                       implode(' OR ', array_map(fn($i)=>"FIND_IN_SET(?, `Seat`)", array_keys($seat_list))).") LIMIT 1";
@@ -169,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
                                     } else {
                                         $seatChk->close();
                                         
-                                        // Build insert SQL based on schema
                                         if ($hasSpaced) {
                                             $insert = "INSERT INTO `User_Profile_Ticket` (`Seat`,`Time`,`Date`,`From`,`To`,`Bus Type`,`Price`,`Passenger Name`,`Email`,`Mobile Number`,`Age`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                                         } elseif ($hasName) {
@@ -190,7 +177,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
                                                 $success = "Booking successful! Your booking ID is: $booking_id";
                                                 $successMsg = "Registration successful!";
                                                 
-                                                // Redirect to payment page after successful booking
                                                 echo "<script>alert('Booking successful! Booking ID: $booking_id'); window.location.href='payment.php?ticket_id=$booking_id';</script>";
                                                 exit();
                                             } else {
@@ -211,7 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['continue_booking'])) 
     }
 }
 
-// Input sanitization function like registration form
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -245,7 +230,6 @@ function test_input($data) {
                 </div>
                 
                 <table class="seat-table">
-                    <!-- Row 1 -->
                     <tr>
                         <td><div class="seat available">A1</div></td>
                         <td class="passage"></td>
@@ -253,7 +237,6 @@ function test_input($data) {
                         <td><div class="seat available">A3</div></td>
                     </tr>
                     
-                    <!-- Row 2 -->
                     <tr>
                          
                         <td><div class="seat available">B1</div></td>
@@ -262,7 +245,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">B3</div></td>
                     </tr>
                     
-                    <!-- Row 3 -->
                     <tr>
                          
                         <td><div class="seat unavailable">C1</div></td>
@@ -271,7 +253,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">C3</div></td>
                     </tr>
                     
-                    <!-- Row 4 -->
                     <tr>
                          
                         <td><div class="seat unavailable">D1</div></td>
@@ -280,7 +261,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">D3</div></td>
                     </tr>
                     
-                    <!-- Row 5 -->
                     <tr>
                          
                         <td><div class="seat unavailable">E1</div></td>
@@ -289,7 +269,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">E3</div></td>
                     </tr>
                     
-                    <!-- Row 6 -->
                     <tr>
                          
                         <td><div class="seat unavailable">F1</div></td>
@@ -298,7 +277,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">F3</div></td>
                     </tr>
                     
-                    <!-- Row 7 -->
                     <tr>
                          
                         <td><div class="seat unavailable">G1</div></td>
@@ -307,7 +285,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">G3</div></td>
                     </tr>
                     
-                    <!-- Row 8 -->
                     <tr>
                          
                         <td><div class="seat available">H1</div></td>
@@ -316,7 +293,6 @@ function test_input($data) {
                         <td><div class="seat available">H3</div></td>
                     </tr>
                     
-                    <!-- Row 9 -->
                     <tr>
                          
                         <td><div class="seat available">I1</div></td>
@@ -325,7 +301,6 @@ function test_input($data) {
                         <td><div class="seat unavailable">I3</div></td>
                     </tr>
                     
-                    <!-- Row 10 -->
                     <tr>
                          
                         <td><div class="seat available">J1</div></td>
@@ -358,14 +333,12 @@ function test_input($data) {
                 <p class="verification-note">(Mobile verification required for new passenger)</p>
                 
                 <form method="POST" action="seatPreview.php" id="bookingForm">
-                    <!-- Display error messages like registration form -->
                     <?php if (!empty($error)): ?>
                         <div style='background:#fee;border:1px solid #c00;padding:8px;color:#900;font-family:monospace;margin-bottom:10px;'>
                             <?php echo htmlspecialchars($error); ?>
                         </div>
                     <?php endif; ?>
                     
-                    <!-- Hidden fields to store ticket information -->
                     <input type="hidden" id="selected_seats_input" name="selected_seats" value="<?php echo htmlspecialchars($selected_seats); ?>">
                     <input type="hidden" id="time_input" name="time" value="<?php echo htmlspecialchars($schedule_time); ?>">
                     <input type="hidden" id="date_input" name="date" value="<?php echo htmlspecialchars($schedule_date); ?>">
@@ -427,7 +400,6 @@ function test_input($data) {
                 </form>
                 
                 <?php
-                // Display success message like registration form
                 if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($nameErr) && empty($emailErr) && empty($phoneErr) && empty($ageErr) && empty($seatsErr) && !empty($successMsg)) {
                     echo "<p class='success' style='color:green;font-weight:bold;'>$successMsg</p>";
                 }
@@ -437,7 +409,6 @@ function test_input($data) {
     </div>
 <?php if (!$fragment): ?>
 <script>
-// Function to populate hidden fields with ticket data from TicketPreview page
 function populateTicketData(ticketData) {
     document.getElementById('time_input').value = ticketData.time || '';
     document.getElementById('date_input').value = ticketData.date || '';
@@ -447,23 +418,18 @@ function populateTicketData(ticketData) {
     document.getElementById('price_input').value = ticketData.price || '';
 }
 
-// Function to update selected seats
 function updateSelectedSeats() {
     const selectedSeats = document.querySelectorAll('.seat.selected');
     const seatNumbers = Array.from(selectedSeats).map(seat => seat.textContent);
     document.getElementById('selected_seats_input').value = seatNumbers.join(',');
     
-    // Update price calculation
     const singlePrice = parseFloat(document.getElementById('price_input').value) || 0;
     const totalPrice = seatNumbers.length * singlePrice;
-    
-    // Display total price (you can add this to your UI)
-    // Update summary UI
+
     document.getElementById('seatCount').textContent = seatNumbers.length;
     document.getElementById('totalFare').textContent = totalPrice.toFixed(2);
 }
 
-// Function to validate booking before submission
 function validateBooking() {
     const selectedSeats = document.getElementById('selected_seats_input').value;
     const passengerName = document.querySelector('input[name="passenger_name"]').value;
@@ -481,14 +447,12 @@ function validateBooking() {
         return false;
     }
     
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         alert('Please enter a valid email address.');
         return false;
     }
     
-    // Phone validation (basic)
     const phoneRegex = /^[0-9]{10,15}$/;
     if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
         alert('Please enter a valid phone number (10-15 digits).');
@@ -498,7 +462,6 @@ function validateBooking() {
     return true;
 }
 
-// Add event listeners for seat selection
 document.addEventListener('DOMContentLoaded', function() {
     const seats = document.querySelectorAll('.seat.available');
     
@@ -513,9 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Initialize with any existing ticket data
-    // This would typically be passed from TicketPreview page
-    // Initialize fare display if fare present
+   
     const fare = document.getElementById('price_input').value;
     if (fare) {
         document.getElementById('singleFareDisplay').textContent = fare;
@@ -523,7 +484,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSelectedSeats();
 });
 
-// Function to close seat preview (called from cancel button)
 function closeSeatPreview() {
     if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
         window.history.back();

@@ -46,7 +46,6 @@ try {
     while ($c = $columnsRes->fetch_assoc()) { $cols[] = $c['Field']; }
     $columnsRes->free();
 
-    // Determine naming convention
     $hasSpacePassenger = in_array('Passenger Name', $cols);
     $hasSnakePassenger = in_array('passenger_name', $cols);
 

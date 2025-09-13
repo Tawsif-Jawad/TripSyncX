@@ -1,12 +1,10 @@
 <?php
-// Initialize variables
 $errors = [];
 $departure = '';
 $destination = '';
 $departure_date = '';
 $return_date = '';
 
-// Valid locations array for validation
 $valid_locations = [
     'Dhaka', 'Chittagong', 'Khulna', 'Rajshahi', 'Sylhet', 'Barisal', 
     'Rangpur', 'Mymensingh', "Cox's Bazar", 'Gazipur', 'Kishoreganj', 
@@ -14,18 +12,14 @@ $valid_locations = [
     'Sunamganj', 'Birganj'
 ];
 
-// Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
     $departure = trim($_POST['departure'] ?? '');
     $destination = trim($_POST['destination'] ?? '');
     $departure_date = trim($_POST['departure_date'] ?? '');
     $return_date = trim($_POST['return_date'] ?? '');
     
-    // Get today's date for comparison
     $today = date('Y-m-d');
     
-    // Validate departure location
     if (empty($departure)) {
         $errors[] = "Please select a departure location.";
     } elseif (!in_array($departure, $valid_locations)) {
@@ -35,55 +29,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     
-    // Validate destination location
     if (empty($destination)) {
         $errors[] = "Please select a destination location.";
     } elseif (!in_array($destination, $valid_locations)) {
         $errors[] = "Invalid destination location selected.";
     }
     
-    // Check if departure and destination are the same
     if (!empty($departure) && !empty($destination) && $departure === $destination) {
         $errors[] = "Departure and destination locations cannot be the same.";
     }
     
-    // Validate departure date
     if (empty($departure_date)) {
         $errors[] = "Please select a departure date.";
     } else {
-        // Check if departure date is valid format
         $departure_timestamp = strtotime($departure_date);
         if ($departure_timestamp === false) {
             $errors[] = "Invalid departure date format.";
         } else {
-            // Check if departure date is today or in the future
             if ($departure_date < $today) {
                 $errors[] = "Departure date cannot be in the past. Please select today's date or a future date.";
             }
         }
     }
     
-    // Validate return date (optional but if provided, must be valid)
     if (!empty($return_date)) {
         $return_timestamp = strtotime($return_date);
         if ($return_timestamp === false) {
             $errors[] = "Invalid return date format.";
         } else {
-            // Check if return date is today or in the future
             if ($return_date < $today) {
                 $errors[] = "Return date cannot be in the past. Please select today's date or a future date.";
             }
             
-            // Check if return date is after or equal to departure date
             if (!empty($departure_date) && $return_date < $departure_date) {
                 $errors[] = "Return date cannot be before the departure date.";
             }
         }
     }
     
-    // If no errors, redirect to ticket preview
     if (empty($errors)) {
-        // Store form data in session or pass as URL parameters
         session_start();
         $_SESSION['search_data'] = [
             'departure' => $departure,
@@ -248,7 +232,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </body>
 </html><?php
-// Check if departure and destination are the same
 if (!empty($departure) && !empty($destination) && $departure === $destination) {
     $errors[] = "Departure and destination locations cannot be the same.";
 }

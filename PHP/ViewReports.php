@@ -10,7 +10,6 @@
 session_start();
 require_once __DIR__ . '/config.php';
 
-// Handle booking cancellation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
     $response = ['success' => false, 'message' => ''];
     
@@ -20,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
         if (empty($pnr)) {
             $response['message'] = 'Invalid PNR provided';
         } else {
-            // Delete booking from database
             $stmt = $conn->prepare("DELETE FROM User_Profile_Ticket WHERE pnr = ?");
             if (!$stmt) {
                 $response['message'] = 'Database prepare error: ' . $conn->error;
@@ -44,17 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
         $response['message'] = 'Error: ' . $e->getMessage();
     }
     
-    // Return JSON response
     header('Content-Type: application/json');
     echo json_encode($response);
     exit();
 }
 
-// Check if user is logged in (optional - you can add this based on your login system)
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: login.php");
-//     exit();
-// }
+
 ?>
   <div class="navigationbar">
         <a href="HomePage.php">
@@ -103,14 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
             <th>Price</th>
           </tr>
           <?php
-          // Fetch booking data from User_Profile_Ticket table
           try {
               $sql = "SELECT * FROM User_Profile_Ticket ORDER BY pnr DESC";
               $result = $conn->query($sql);
               
               if ($result && $result->num_rows > 0) {
                   while($row = $result->fetch_assoc()) {
-                      // Handle different column naming patterns
                       $pnr = $row['pnr'] ?? '';
                       $time = $row['time'] ?? $row['Time'] ?? '';
                       $date = $row['date'] ?? $row['Date'] ?? '';
@@ -120,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
                       $price = $row['price'] ?? $row['Price'] ?? '';
                       $passenger_name = $row['name'] ?? $row['passenger_name'] ?? $row['Passenger Name'] ?? '';
                       
-                      // Format route
                       $route = $from . " to " . $to;
                       
                       echo '<tr class="ticket-row" data-ticket-id="' . htmlspecialchars($pnr) . '">';
@@ -140,7 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_booking'])) {
               echo '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #c00;">Error loading bookings: ' . htmlspecialchars($e->getMessage()) . '</td></tr>';
           }
           
-          // Close database connection
           $conn->close();
           ?>
         </table>

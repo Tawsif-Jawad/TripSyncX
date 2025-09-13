@@ -1,20 +1,15 @@
 <?php
-// Include database configuration
 include 'config.php';
 
-// Initialize variables for ticket data
 $ticketData = [];
 $totalPrice = 0;
 $ticketCount = 0;
 $errors = [];
 
-// Fetch ticket data from user_profile_ticket table
 try {
-    // Get ticket ID from URL parameter or session (you may need to adjust this based on your flow)
     $ticketId = isset($_GET['ticket_id']) ? (int)$_GET['ticket_id'] : null;
     
     if ($ticketId) {
-        // Fetch specific ticket by PNR
         $stmt = $conn->prepare("SELECT * FROM User_Profile_Ticket WHERE pnr = ?");
         $stmt->bind_param("i", $ticketId);
         $stmt->execute();
@@ -25,7 +20,6 @@ try {
             $ticketCount = 1;
         }
     } else {
-        // If no specific ticket ID, fetch recent unpaid tickets (you may want to add a payment_status column)
         $sql = "SELECT * FROM User_Profile_Ticket ORDER BY created_at DESC LIMIT 5";
         $result = $conn->query($sql);
         
@@ -37,7 +31,6 @@ try {
         }
     }
     
-    // Calculate total price
     foreach ($ticketData as $ticket) {
         $price = $ticket['Price'] ?? $ticket['price'] ?? 0;
         $totalPrice += (float)$price;
@@ -47,7 +40,6 @@ try {
     $errors[] = "Error fetching ticket data: " . $e->getMessage();
 }
 
-// --- Simple PHP Validation ---
 $company = $tax = $address = $method = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,14 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors)) {
-        // Process payment successfully
-        $finalAmount = $totalPrice * 1.08; // Including 8% VAT
-        
-        // Here you could update the ticket status in the database or create a payment record
-        // For example: UPDATE User_Profile_Ticket SET payment_status = 'paid' WHERE pnr IN (...)
+        $finalAmount = $totalPrice * 1.08; 
         
         echo "<div style='color:green; padding: 10px; background: #f0f8f0; border: 1px solid green; margin: 10px 0;'>";
-        echo "<h3>✅ Payment Successful!</h3>";
+        echo "<h3>Payment Successful!</h3>";
         echo "<p><strong>Payment Method:</strong> $method</p>";
         echo "<p><strong>Amount Paid:</strong> " . number_format($finalAmount) . " BDT (including 8% VAT)</p>";
         
@@ -130,7 +118,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 <form method="POST" action="">
     <div class="container">
-        <!-- Left Side -->
         <div class="box">
             <h2>Invoicing (Optional)</h2>
             <label> Name</label>
@@ -158,7 +145,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Pay Now</button>
         </div>
 
-        <!-- Right Side -->
         <div class="box">
             <h2>Your Order</h2>
             <?php if (!empty($ticketData)): ?>

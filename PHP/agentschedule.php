@@ -66,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fare = test_input($_POST["fare"]);
     $check = test_input($_POST["check"]);
 
-    // Validation (You can expand this with more detailed checks)
     if (empty($id)) $idErr = "Bus ID is required";
     if (empty($from)) $fromErr = "From location is required";
     if (empty($to)) $toErr = "To location is required";

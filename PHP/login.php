@@ -9,7 +9,6 @@
           $mobileNo = isset($_POST['mobileNo']) ? $_POST['mobileNo'] : "";
           $password = isset($_POST['password']) ? $_POST['password'] : "";
           
-          // Check for session timeout messages
           if (isset($_GET['error'])) {
               if ($_GET['error'] === 'session_expired') {
                   $error = isset($_GET['message']) ? $_GET['message'] : "Your session has expired. Please login again.";
@@ -18,7 +17,6 @@
               }
           }
           
-          // Check for logout success message
           if (isset($_GET['message'])) {
               $success_message = $_GET['message'];
           }
@@ -26,22 +24,19 @@
           if ($_SERVER["REQUEST_METHOD"] == "POST") {
               if (!empty($username) && !empty($mobileNo) && !empty($password)) {
                   
-                  // Check for default admin credentials first
                   if ($username === "admin" && $mobileNo === "00000000000" && $password === "adminadmin") {
                       $success = true;
                       $userRole = "Admin";
                       $userName = "admin";
                       
-                      // Start session and store admin info
                       session_start();
-                      $_SESSION['user_id'] = 0; // Default admin ID
+                      $_SESSION['user_id'] = 0; 
                       $_SESSION['user_name'] = "admin";
                       $_SESSION['user_role'] = "Admin";
                       $_SESSION['user_email'] = "admin@tripsynx.com";
-                      $_SESSION['login_time'] = time(); // Store login timestamp
-                      $_SESSION['session_timeout'] = 300; // 5 minutes in seconds
+                      $_SESSION['login_time'] = time(); 
+                      $_SESSION['session_timeout'] = 300; 
                   } else {
-                      // Query database for other users
                       try {
                           $stmt = $conn->prepare("SELECT id, role, name, email, phone, password FROM users WHERE name = ? AND phone = ?");
                           $stmt->bind_param("ss", $username, $mobileNo);
@@ -51,20 +46,18 @@
                           if ($result->num_rows === 1) {
                               $user = $result->fetch_assoc();
                               
-                              // Verify password (check both hashed and plain text for backward compatibility)
                               if (password_verify($password, $user['password']) || $password === $user['password']) {
                                   $success = true;
                                   $userRole = $user['role'];
                                   $userName = $user['name'];
                                   
-                                  // Start session and store user info
                                   session_start();
                                   $_SESSION['user_id'] = $user['id'];
                                   $_SESSION['user_name'] = $user['name'];
                                   $_SESSION['user_role'] = $user['role'];
                                   $_SESSION['user_email'] = $user['email'];
-                                  $_SESSION['login_time'] = time(); // Store login timestamp
-                                  $_SESSION['session_timeout'] = 300; // 5 minutes in seconds
+                                  $_SESSION['login_time'] = time(); 
+                                  $_SESSION['session_timeout'] = 300; 
                               } else {
                                   $error = "Invalid password!";
                               }

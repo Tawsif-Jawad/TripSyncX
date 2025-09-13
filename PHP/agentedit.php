@@ -4,11 +4,9 @@ include "config.php";
 $successMsg = $errorMsg = "";
 $id = $from = $to = $time = $type = $seat = $fare = $check = "";
 
-// Get schedule ID from URL
 if (isset($_GET['id'])) {
     $schedule_id = $_GET['id'];
 
-    // Fetch existing data
     $sql = "SELECT * FROM schedule WHERE id = '$schedule_id'";
     $result = $conn->query($sql);
     if ($result->num_rows == 1) {
@@ -26,7 +24,6 @@ if (isset($_GET['id'])) {
     }
 }
 
-// Handle update
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST["id"];
     $from = $_POST["from"];

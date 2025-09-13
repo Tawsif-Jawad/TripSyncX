@@ -4,7 +4,6 @@ include "config.php";
 echo "<h2>Create User_Profile_Ticket Table</h2>";
 
 try {
-    // Create User_Profile_Ticket table
     $create_table = "CREATE TABLE IF NOT EXISTS User_Profile_Ticket (
         pnr INT AUTO_INCREMENT PRIMARY KEY,
         Seat VARCHAR(255) NOT NULL,
@@ -22,9 +21,8 @@ try {
     )";
     
     if ($conn->query($create_table) === TRUE) {
-        echo "<p style='color: green;'>✅ User_Profile_Ticket table created successfully!</p>";
+        echo "<p style='color: green;'> User_Profile_Ticket table created successfully!</p>";
         
-        // Show table structure
         $structure = $conn->query("DESCRIBE User_Profile_Ticket");
         echo "<h3>Table Structure:</h3>";
         echo "<table border='1' style='border-collapse: collapse; margin: 10px 0;'>";

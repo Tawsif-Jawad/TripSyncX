@@ -1,10 +1,8 @@
 <?php
-// --- Basic PHP validation ---
 $email = $password = $confirm = "";
 $errors = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Email validation
     if (empty($_POST["email"])) {
         $errors[] = "Email is required.";
     } else {
@@ -14,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Password validation
     if (empty($_POST["password"])) {
         $errors[] = "Password is required.";
     } else {
@@ -24,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Confirm password validation
     if (empty($_POST["confirm"])) {
         $errors[] = "Please confirm your password.";
     } else {
@@ -34,9 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // If no errors, success message
     if (empty($errors)) {
-        echo "<p style='color:green;'>Password reset successful ✅</p>";
+        echo "<p style='color:green;'>Password reset successful </p>";
     }
 }
 ?>
