@@ -1,0 +1,151 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(234, 245, 239);
+    height: inherit;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+.navigationbar {
+    width: 100%;
+    height: 100px;
+    background-color: rgb(207, 223, 215);
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px dashed rgb(41, 63, 62);
+    padding: 20px 0;
+    overflow: hidden;
+    opacity: 90%;
+}
+.navigationbar img {
+    width: 10%;
+    height: 70px;
+    cursor: pointer;
+    border: none;
+    float: left;
+    margin-top: 5px;
+}
+.navigationbar button {
+    float: right;
+    border: none;
+    background: none;
+    color: rgb(43, 66, 68);
+    font-size: 25px;
+    cursor: pointer;
+    padding: 15px 10px;
+    margin-top: 10px;
+}
+.navigationbar button:hover {
+    text-decoration: underline;color: #ff8000;
+}
+
+
+#sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #232946;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+}
+
+
+#sidebar {
+  width: 240px;
+  height: 100vh;
+  margin-top: 100px;
+  background: rgb(41, 63, 62);
+  color: rgb(234, 245, 239);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+}
+.sidebar-link {
+  
+  margin-top: 60px;
+}
+
+
+.sidebar-btn, .sidebar-link {
+  width: 90%;
+  padding: 14px 0 14px 30px;
+  margin: 6px auto;
+  background: none;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: block;
+  text-decoration: none;
+}
+
+.sidebar-btn.active, .sidebar-btn:hover, .sidebar-link.active, .sidebar-link:hover {
+  background: rgb(207, 223, 215);
+  color: rgb(41, 63, 62);
+}
+
+
+.sidebar-section {
+  margin-top: 30px;
+}
+
+
+.content {
+  margin-left: 240px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.ticket-preview-table{
+    width: 80%;
+    height: auto;
+    padding: 10px;
+    background-color: rgb(234, 245, 239);
+    border: 1px solid rgb(41, 63, 62);
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    color: rgb(41, 63, 62);
+    margin-top: 50px;
+    margin-right: 10px;
+    margin-left: 250px;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+.ticket-preview-table table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgb(41, 63, 62);
+    border-radius: 10px;
+}
+.ticket-preview-table th{
+    background-color: rgb(207, 223, 215);
+    text-align: center;
+    padding: 20px;
+    border: none;
+}
+.ticket-preview-table td{
+    border-top: 1px solid rgb(41, 63, 62);
+    padding: 15px;
+    text-align: center;
+}
+
+
